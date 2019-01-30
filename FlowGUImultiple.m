@@ -56,7 +56,7 @@ function FlowGUImultiple_OpeningFcn(hObject, eventdata, handles, varargin)
 handles.output = hObject;
 handles.clustermethods.String={'Hard KMEANS (on t-SNE)','Hard KMEANS (on HD Data)',...
     'DBSCAN','Hierarchical Clustering','Network Graph-Based','Self Organized Map',...
-    'GMM - Expectation Minimization','Variational Bayesian Inference for GMM'};
+    'GMM - Expectation Maximization','Variational Bayesian Inference for GMM'};
 
 addpath('Functions/');
 
