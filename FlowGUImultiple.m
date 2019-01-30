@@ -147,9 +147,6 @@ for i=1:size(filename,2)
 
 end
 
-%header{3}='FoxP3';header{4}='L/D';header{5}='CTLA4';header{6}='CD4';header{7}='CD40L';header{8}='PD1';header{9}='Gal3';header{10}='Thy1.2';header{11}='CD8';header{12}='Tim3';
-%header{3}='EOMES';header{4}='CD8';header{5}='CTLA4';header{6}='CD4';header{7}='Lag3';header{8}='Tbet';header{9}='Thy1.2';header{10}='PD1';header{11}='L/D';header{12}='Tim3'; 
-%header{3}='MHCII';header{4}='L/D';header{5}='CD86';header{6}='Ly6C';header{7}='F480';header{8}='CD11c';header{9}='CD11b';header{10}='CD8';header{11}='Ly6G';
 handles.ChannelsAll=header;
 handles.channel_select.String=header;
 handles.popupmenu1.String=header;
@@ -989,9 +986,7 @@ guidata(hObject,handles);
         end
         
         
-        
-       
-        
+           
 
     function handles=UpdateTable1old(handles)
         I=handles.Ifinal;
@@ -1065,8 +1060,7 @@ guidata(hObject,handles);
             handles.clusterbreakdown2.Data={};
         end
 
-        
-       
+             
 
 % --- Executes on button press in remove.
 function remove_Callback(hObject, eventdata, handles)
@@ -1325,7 +1319,6 @@ end
 % F=getframe(handles.tsneplot);
 % Image=frame2im(F);
 % imwrite(Image,strcat(path,file));
-
 
 
 
