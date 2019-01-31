@@ -29,5 +29,5 @@ J. Vis. Exp. (143), e57473, doi:10.3791/57473 (2019).
 ## Installation
 
 
-n order to run ExCYT, install MATLAB R2018b, download main directory and 
+In order to run ExCYT, install MATLAB R2018b, download main directory and 
 run FlowGUImultiple.m from the MATLAB command line to open GUI.
