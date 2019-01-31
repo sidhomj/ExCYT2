@@ -22,7 +22,7 @@ function varargout = FlowGUImultiple(varargin)
 
 % Edit the above text to modify the response to help FlowGUImultiple
 
-% Last Modified by GUIDE v2.5 17-Nov-2017 16:56:14
+% Last Modified by GUIDE v2.5 31-Jan-2019 10:24:33
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -116,7 +116,7 @@ for i=1:size(filename,2)
         
         %Remove All Cells with negative data
         data=data(~any(data<0,2),:);
-        %compensated_data=compensated_data(~any(compensated_data<0,2),:);
+        compensated_data=compensated_data(~any(compensated_data<0,2),:);
         handles.num(i).num=compensated_data; %num is used to store compensated data
         handles.num2(i).num=data; %num2 is used to store uncompensated data
         header=marker_names;
@@ -551,12 +551,7 @@ end
 
 
 normalizetsne=1;
-if handles.radiobutton1.Value==0
-    Y=tsne(y,'Standardize',normalizetsne);
-else
-    Y=tsne(y,'Standardize',normalizetsne,'NumDimensions',3);
-end
-
+Y=tsne(y,'Standardize',normalizetsne);
 close(hbox);
 handles.Y=Y;
 
@@ -568,22 +563,14 @@ for i=1:size(handles.idx_cohort_new,1);
     colorscheme(i,:)=colorspec1(handles.idx_cohort_new(i)).spec;
 end
 
-if handles.radiobutton1.Value==0
-    scatter(handles.tsneplot,Y(:,1),Y(:,2),15,colorscheme,'filled','MarkerFaceAlpha',0.75,'MarkerEdgeColor',[0 0 0],'MarkerEdgeAlpha',0.6);
-else 
-    scatter3(handles.tsneplot,Y(:,1),Y(:,2),Y(:,3),15,colorscheme,'filled','MarkerFaceAlpha',0.75,'MarkerEdgeColor',[0 0 0],'MarkerEdgeAlpha',0.6);
-    rotate3d on
-end
+scatter(handles.tsneplot,Y(:,1),Y(:,2),15,colorscheme,'filled','MarkerFaceAlpha',0.75,'MarkerEdgeColor',[0 0 0],'MarkerEdgeAlpha',0.6);
+
 
 handles.tsneplot.XTickLabel={};
 handles.tsneplot.YTickLabel={};
 handles.tsne_xlim=handles.tsneplot.XLim;
 handles.tsne_ylim=handles.tsneplot.YLim;
-if handles.radiobutton1.Value==1
-    handles.tsneplot.ZTickLabel={};
-    handles.tsne_zlim=handles.tsneplot.ZLim;
-    handles.tsne_zlim=handles.tsneplot.ZLim;
-end
+
 
 PlotClusterView(handles,Y);
 
@@ -686,11 +673,8 @@ end
 
 
 addpath('drtoolbox/techniques');
-if handles.radiobutton1.Value==0
-    Y=diffusion_maps(y,2,1,1);
-else
-    Y=diffusion_maps(y,3,1,1);
-end
+Y=diffusion_maps(y,2,1,1);
+
 rmpath('drtoolbox/techniques');
 close(hbox);
 handles.Y=Y;
@@ -703,22 +687,14 @@ for i=1:size(handles.idx_cohort_new,1);
     colorscheme(i,:)=colorspec1(handles.idx_cohort_new(i)).spec;
 end
 
-if handles.radiobutton1.Value==0
-    scatter(handles.tsneplot,Y(:,1),Y(:,2),15,colorscheme,'filled','MarkerFaceAlpha',0.75,'MarkerEdgeColor',[0 0 0],'MarkerEdgeAlpha',0.6);
-else 
-    scatter3(handles.tsneplot,Y(:,1),Y(:,2),Y(:,3),15,colorscheme,'filled','MarkerFaceAlpha',0.75,'MarkerEdgeColor',[0 0 0],'MarkerEdgeAlpha',0.6);
-    rotate3d on
-end
+scatter(handles.tsneplot,Y(:,1),Y(:,2),15,colorscheme,'filled','MarkerFaceAlpha',0.75,'MarkerEdgeColor',[0 0 0],'MarkerEdgeAlpha',0.6);
+
 
 handles.tsneplot.XTickLabel={};
 handles.tsneplot.YTickLabel={};
 handles.tsne_xlim=handles.tsneplot.XLim;
 handles.tsne_ylim=handles.tsneplot.YLim;
-if handles.radiobutton1.Value==1
-    handles.tsneplot.ZTickLabel={};
-    handles.tsne_zlim=handles.tsneplot.ZLim;
-    handles.tsne_zlim=handles.tsneplot.ZLim;
-end
+
 colorscheme=[0,0.447000000000000,0.741000000000000];
 PlotClusterView(handles,Y,colorscheme);
 
@@ -744,8 +720,7 @@ guidata(hObject,handles);
         end
         num=numout;
 
-        
-
+       
 
 % --- Executes on button press in selclusters.
 function selclusters_Callback(hObject, eventdata, handles)
@@ -985,8 +960,7 @@ guidata(hObject,handles);
             handles.clusterbreakdown.Data={};
         end
         
-        
-           
+                
 
     function handles=UpdateTable1old(handles)
         I=handles.Ifinal;
@@ -1277,6 +1251,18 @@ function savetsne_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
+[file,path,filetype]=uiputfile({'*.bmp','BMP';'*.jpeg','JPEG';'*.png','PNG'},'Save Image As');
+F=getframe(handles.tsneplot);
+Image=frame2im(F);
+imwrite(Image,strcat(path,file));
+
+
+% --- Executes on button press in deconvolute.
+function deconvolute_Callback(hObject, eventdata, handles)
+% hObject    handle to deconvolute (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
 %%%Separate Images by cohort
 colorspec1=handles.colorspec1;
 clear colorscheme
@@ -1294,31 +1280,7 @@ for i = 1:size(cohorts,1);
     title(cohorts(i))
 end
 
-% %%%Separate Images by cohort and cluster
-% cohorts=unique(handles.idx_cohort_new);
-% figure
-% for i = 1:size(cohorts,1);
-%     sel=handles.idx_cohort_new==cohorts(i);
-%     clear colorscheme
-%     for i=1:size(handles.idx,1);
-%         colorscheme(i,:)=colorspec1(handles.idx(i)).spec;
-%     end
-%     colorscheme=colorscheme(sel,:);
-%     scatter(handles.Y(sel,1),handles.Y(sel,2),15,colorscheme,'filled','MarkerFaceAlpha',0.75,'MarkerEdgeColor',[0 0 0],'MarkerEdgeAlpha',0.6);  
-%     hold on
-%     xticks([])
-%     yticks([])
-%     xlim(handles.tsne_xlim)
-%     ylim(handles.tsne_ylim)
-%     
-% end
 
-
-
-% [file,path,filetype]=uiputfile({'*.bmp','BMP';'*.jpeg','JPEG';'*.png','PNG'},'Save Image As');
-% F=getframe(handles.tsneplot);
-% Image=frame2im(F);
-% imwrite(Image,strcat(path,file));
 
 
 
@@ -2602,15 +2564,6 @@ function cluster_stat_Callback(hObject, eventdata, handles)
    
 
 
-% --- Executes on button press in radiobutton1.
-function radiobutton1_Callback(hObject, eventdata, handles)
-% hObject    handle to radiobutton1 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hint: get(hObject,'Value') returns toggle state of radiobutton1
-
-
 % --- Executes on button press in gatevis.
 function gatevis_Callback(hObject, eventdata, handles)
 % hObject    handle to gatevis (see GCBO)
@@ -2662,5 +2615,6 @@ switch choice
 end
 
 guidata(hObject,handles);
+
 
 

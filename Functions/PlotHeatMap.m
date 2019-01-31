@@ -4,7 +4,6 @@ function HMobj= PlotHeatMap(HeatMapData,RowLabels,ChannelsOut);
     try
         HMobj = clustergram(HeatMapData,'ColumnLabels',ChannelsOut,'RowLabels',RowLabels,'Standardize',1,'DisplayRange',3,'DisplayRatio',0.05,'Colormap',colormap,'ColumnPDist','correlation','ColumnLabelsRotate',45);
     catch
-        close
         try
             HMobj = clustergram(HeatMapData,'ColumnLabels',ChannelsOut,'RowLabels',RowLabels,'Standardize',1,'DisplayRange',3,'DisplayRatio',0.05,'Colormap',colormap,'ColumnLabelsRotate',45);
         catch
