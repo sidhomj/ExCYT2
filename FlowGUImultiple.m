@@ -274,8 +274,8 @@ function gate_Callback(hObject, eventdata, handles)
     end
     
     handles.fileselect=fileselect;
-    positiongui=handles.figure1.Parent.PointerLocation;
-    
+    %positiongui=handles.figure1.Parent.PointerLocation;
+    positiongui = [0,0];
     fhgat = figure('units','pixels',...
                   'position',[positiongui 600 600],...
                   'menubar','none',...
